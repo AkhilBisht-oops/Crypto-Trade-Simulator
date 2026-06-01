@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  username  String   @unique
+  password  String
+  balance   Float    @default(10000)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  trades    Trade[]
+  holdings  Holding[]
+  watchlist Watchlist[]
+
+  @@map("users")
+}
+
+model Trade {
+  id        String    @id @default(cuid())
+  userId    String
+  symbol    String
+  type      TradeType
+  quantity  Float
+  price     Float
+  total     Float
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([symbol])
+  @@index([createdAt])
+  @@map("trades")
+}
+
+model Holding {
+  id          String @id @default(cuid())
+  userId      String
+  symbol      String
+  quantity    Float
+  avgBuyPrice Float
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, symbol])
+  @@map("holdings")
+}
+
+model Watchlist {
+  id     String @id @default(cuid())
+  userId String
+  symbol String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, symbol])
+  @@map("watchlists")
+}
+
+enum TradeType {
+  BUY
+  SELL
+}
