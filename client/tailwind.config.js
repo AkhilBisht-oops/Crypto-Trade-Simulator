@@ -4,22 +4,6 @@ export default {
   theme: {
     extend: {
       colors: {
-        bgMain: 'var(--bg-main)',
-        bgSub: 'var(--bg-sub)',
-        bgCard: 'var(--bg-card)',
-        bgInput: 'var(--bg-input)',
-        textPrimary: 'var(--text-primary)',
-        textSecondary: 'var(--text-secondary)',
-        textMuted: 'var(--text-muted)',
-        borderAccent: 'var(--border)',
-        borderAccentHover: 'var(--border-hover)',
-        accentColor: 'var(--accent)',
-        accentColorLight: 'var(--accent-light)',
-        accentColorHover: 'var(--accent-hover)',
-        successColor: 'var(--success)',
-        successColorLight: 'var(--success-light)',
-        dangerColor: 'var(--danger)',
-        dangerColorLight: 'var(--danger-light)',
         dark: {
           50: '#f8fafc',
           100: '#e2e8f0',

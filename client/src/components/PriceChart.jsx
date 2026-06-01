@@ -11,7 +11,7 @@ export default function PriceChart({ symbol }) {
   const info = SYMBOL_INFO[symbol];
 
   const isUp = (priceData?.change24h || 0) >= 0;
-  const color = isUp ? 'var(--success)' : 'var(--danger)';
+  const color = isUp ? '#34d399' : '#fb7185';
 
   const chartData = history.map((price, index) => ({
     index,
@@ -21,15 +21,15 @@ export default function PriceChart({ symbol }) {
   if (chartData.length < 3) {
     return (
       <div className="glass-card p-6">
-        <h3 className="text-sm font-semibold text-textPrimary flex items-center gap-2 mb-4">
+        <h3 className="text-sm font-semibold text-white flex items-center gap-2 mb-4">
           <span style={{ color: info?.color }}>{info?.icon}</span>
           {symbol.replace('USDT', '')}/USDT
         </h3>
-        <div className="h-64 flex items-center justify-center text-textMuted">
-          <div className="text-center animate-pulse">
+        <div className="h-64 flex items-center justify-center text-dark-400">
+          <div className="text-center">
             <div className="text-3xl mb-3">📊</div>
-            <p className="text-sm font-medium">Collecting price data...</p>
-            <p className="text-xs text-textMuted mt-1">Chart will appear shortly</p>
+            <p className="text-sm">Collecting price data...</p>
+            <p className="text-xs text-dark-500 mt-1">Chart will appear shortly</p>
           </div>
         </div>
       </div>
@@ -42,11 +42,11 @@ export default function PriceChart({ symbol }) {
   return (
     <div className="glass-card p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-sm font-semibold text-textPrimary flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-white flex items-center gap-2">
           <span style={{ color: info?.color }}>{info?.icon}</span>
           {symbol.replace('USDT', '')}/USDT
         </h3>
-        <span className="font-mono text-xl font-bold text-textPrimary">
+        <span className="font-mono text-xl font-semibold text-white">
           {formatCryptoPrice(priceData?.price || 0)}
         </span>
       </div>
@@ -64,13 +64,13 @@ export default function PriceChart({ symbol }) {
             <YAxis domain={[minPrice, maxPrice]} hide />
             <Tooltip
               contentStyle={{
-                backgroundColor: 'var(--bg-card)',
-                border: '1px solid var(--border)',
+                backgroundColor: '#1a1d2e',
+                border: '1px solid rgba(255, 255, 255, 0.05)',
                 borderRadius: '8px',
-                color: 'var(--text-primary)',
+                color: '#e2e8f0',
                 fontSize: '12px',
                 fontFamily: 'JetBrains Mono, monospace',
-                boxShadow: 'var(--shadow-md)',
+                boxShadow: '0 8px 30px rgba(0, 0, 0, 0.3)',
               }}
               formatter={(value) => [formatCryptoPrice(value), 'Price']}
               labelFormatter={() => ''}
@@ -82,7 +82,7 @@ export default function PriceChart({ symbol }) {
               strokeWidth={2}
               fill={`url(#gradient-${symbol})`}
               dot={false}
-              activeDot={{ r: 4, fill: color, stroke: 'var(--bg-card)', strokeWidth: 2 }}
+              activeDot={{ r: 4, fill: color, stroke: '#0b0f19', strokeWidth: 2 }}
             />
           </AreaChart>
         </ResponsiveContainer>

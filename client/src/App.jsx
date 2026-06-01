@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useAuthStore } from './stores/authStore';
 import { Toaster } from 'react-hot-toast';
 
@@ -20,34 +20,21 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 export default function App() {
   const { loadUser, isAuthenticated } = useAuthStore();
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || 
-      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  });
 
   useEffect(() => {
     loadUser();
   }, [loadUser]);
 
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
-  };
-
   return (
     <Router>
-      <div className="min-h-screen bg-bgMain text-textSecondary flex flex-col font-sans transition-colors duration-200">
+      <div className="min-h-screen bg-dark-950 text-white flex flex-col font-sans">
         <Toaster position="top-right" reverseOrder={false} />
 
         {/* Global Live Price Ticker */}
         {isAuthenticated && <LiveTicker />}
 
         {/* Main Navbar */}
-        {isAuthenticated && <Navbar theme={theme} toggleTheme={toggleTheme} />}
+        {isAuthenticated && <Navbar />}
 
         {/* Routes Area */}
         <main className={`flex-1 ${isAuthenticated ? 'max-w-[1920px] w-full mx-auto p-4 sm:p-6' : ''}`}>

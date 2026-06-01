@@ -33,24 +33,24 @@ export default function PortfolioSummary() {
       label: 'Total Portfolio',
       value: formatCurrency(portfolio.totalValue),
       icon: HiCollection,
-      color: 'text-textPrimary',
-      iconColor: 'text-accentColor',
-      iconBg: 'bg-accentColor/10',
+      color: 'text-white',
+      iconColor: 'text-indigo-400',
+      iconBg: 'bg-indigo-500/10',
     },
     {
       label: 'Cash Balance',
       value: formatCurrency(portfolio.cashBalance),
       icon: HiCash,
-      color: 'text-textPrimary',
-      iconColor: 'text-amber-500',
+      color: 'text-white',
+      iconColor: 'text-amber-400',
       iconBg: 'bg-amber-500/10',
     },
     {
       label: 'Holdings Value',
       value: formatCurrency(portfolio.holdingsValue),
       icon: HiCollection,
-      color: 'text-textPrimary',
-      iconColor: 'text-cyan-500',
+      color: 'text-white',
+      iconColor: 'text-cyan-400',
       iconBg: 'bg-cyan-500/10',
     },
     {
@@ -58,9 +58,9 @@ export default function PortfolioSummary() {
       value: `${formatCurrency(Math.abs(portfolio.totalPnl))}`,
       subtitle: formatPercentage(portfolio.totalPnlPercentage),
       icon: isProfit ? HiTrendingUp : HiTrendingDown,
-      color: isProfit ? 'text-successColor' : 'text-dangerColor',
-      iconColor: isProfit ? 'text-successColor' : 'text-dangerColor',
-      iconBg: isProfit ? 'bg-successColorLight' : 'bg-dangerColorLight',
+      color: isProfit ? 'text-emerald-400' : 'text-rose-400',
+      iconColor: isProfit ? 'text-emerald-400' : 'text-rose-400',
+      iconBg: isProfit ? 'bg-emerald-500/10' : 'bg-rose-500/10',
     },
   ];
 
@@ -75,11 +75,11 @@ export default function PortfolioSummary() {
                 <div className={`p-2 rounded-lg ${stat.iconBg}`}>
                   <Icon className={`w-4 h-4 ${stat.iconColor}`} />
                 </div>
-                <span className="text-xs text-textMuted font-medium">{stat.label}</span>
+                <span className="text-xs text-dark-400">{stat.label}</span>
               </div>
-              <p className={`text-xl font-bold font-mono ${stat.color}`}>{stat.value}</p>
+              <p className={`text-xl font-semibold font-mono ${stat.color}`}>{stat.value}</p>
               {stat.subtitle && (
-                <p className={`text-xs font-mono font-semibold mt-1 ${stat.color}`}>
+                <p className={`text-xs font-mono mt-1 ${stat.color}`}>
                   {isProfit ? '+' : '-'}{stat.subtitle}
                 </p>
               )}
@@ -90,42 +90,42 @@ export default function PortfolioSummary() {
 
       {portfolio.holdings.length > 0 && (
         <div className="glass-card">
-          <div className="p-4 border-b border-borderAccent/60">
-            <h3 className="text-sm font-semibold text-textPrimary">Holdings</h3>
+          <div className="p-4 border-b border-white/5">
+            <h3 className="text-sm font-semibold text-white">Holdings</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="text-left text-xs text-textMuted border-b border-borderAccent">
-                  <th className="p-4 font-semibold">Asset</th>
-                  <th className="p-4 font-semibold">Quantity</th>
-                  <th className="p-4 font-semibold">Avg Price</th>
-                  <th className="p-4 font-semibold">Current Price</th>
-                  <th className="p-4 font-semibold">Value</th>
-                  <th className="p-4 font-semibold">P&L</th>
+                <tr className="text-left text-xs text-dark-400 border-b border-white/5">
+                  <th className="p-4 font-medium">Asset</th>
+                  <th className="p-4 font-medium">Quantity</th>
+                  <th className="p-4 font-medium">Avg Price</th>
+                  <th className="p-4 font-medium">Current Price</th>
+                  <th className="p-4 font-medium">Value</th>
+                  <th className="p-4 font-medium">P&L</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-borderAccent/50">
+              <tbody className="divide-y divide-white/5">
                 {portfolio.holdings.map((h) => {
                   const info = SYMBOL_INFO[h.symbol];
                   const isProfitable = h.pnl >= 0;
                   return (
-                     <tr key={h.symbol} className="hover:bg-bgSub/40 transition-colors">
+                    <tr key={h.symbol} className="hover:bg-white/[0.02] transition-colors">
                       <td className="p-4">
                         <div className="flex items-center gap-2.5">
                           <span style={{ color: info?.color }} className="text-base">{info?.icon}</span>
                           <div>
-                            <p className="font-semibold text-textPrimary text-sm">{h.symbol.replace('USDT', '')}</p>
-                            <p className="text-xs text-textMuted">{info?.name}</p>
+                            <p className="font-medium text-white text-sm">{h.symbol.replace('USDT', '')}</p>
+                            <p className="text-xs text-dark-400">{info?.name}</p>
                           </div>
                         </div>
                       </td>
-                      <td className="p-4 font-mono text-sm text-textSecondary">{h.quantity.toFixed(6)}</td>
-                      <td className="p-4 font-mono text-sm text-textMuted">{formatCurrency(h.avgBuyPrice)}</td>
-                      <td className="p-4 font-mono text-sm text-textSecondary">{formatCurrency(h.currentPrice)}</td>
-                      <td className="p-4 font-mono text-sm text-textPrimary font-semibold">{formatCurrency(h.currentValue)}</td>
+                      <td className="p-4 font-mono text-sm text-dark-200">{h.quantity.toFixed(6)}</td>
+                      <td className="p-4 font-mono text-sm text-dark-400">{formatCurrency(h.avgBuyPrice)}</td>
+                      <td className="p-4 font-mono text-sm text-dark-200">{formatCurrency(h.currentPrice)}</td>
+                      <td className="p-4 font-mono text-sm text-white">{formatCurrency(h.currentValue)}</td>
                       <td className="p-4">
-                        <div className={`font-mono text-sm font-semibold ${isProfitable ? 'text-successColor' : 'text-dangerColor'}`}>
+                        <div className={`font-mono text-sm ${isProfitable ? 'text-emerald-400' : 'text-rose-400'}`}>
                           <p>{isProfitable ? '+' : ''}{formatCurrency(h.pnl)}</p>
                           <p className="text-xs">{isProfitable ? '+' : ''}{formatPercentage(h.pnlPercentage)}</p>
                         </div>

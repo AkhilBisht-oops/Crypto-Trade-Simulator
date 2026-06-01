@@ -33,46 +33,46 @@ export default function TradingCard({ symbol, onSelect, isSelected }) {
     <button
       onClick={() => onSelect(symbol)}
       className={`glass-card-hover p-4 text-left w-full transition-all duration-200 ${
-        isSelected ? 'border-accentColor/50 bg-accentColor/5 shadow-sm' : ''
+        isSelected ? 'border-indigo-500/40 bg-indigo-500/5' : ''
       }`}
     >
       {/* Subtle left accent for selected card */}
       {isSelected && (
-        <div className="absolute top-0 left-0 bottom-0 w-[3px] bg-accentColor" />
+        <div className="absolute top-0 left-0 bottom-0 w-[2px] bg-indigo-500" />
       )}
       
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2.5">
           <div
             className="w-9 h-9 rounded-lg flex items-center justify-center text-lg"
-            style={{ backgroundColor: `${info.color}15`, color: info.color }}
+            style={{ backgroundColor: `${info.color}10`, color: info.color }}
           >
             {info.icon}
           </div>
           <div>
-            <h3 className="font-semibold text-textPrimary text-sm">{symbol.replace('USDT', '')}</h3>
-            <p className="text-[11px] text-textMuted">{info.name}</p>
+            <h3 className="font-semibold text-white text-sm">{symbol.replace('USDT', '')}</h3>
+            <p className="text-[11px] text-dark-400">{info.name}</p>
           </div>
         </div>
-        <span className={`text-xs font-semibold font-mono px-2 py-0.5 rounded-md ${
-          isUp ? 'bg-successColorLight text-successColor' : 'bg-dangerColorLight text-dangerColor'
+        <span className={`text-xs font-medium font-mono px-2 py-0.5 rounded-md ${
+          isUp ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'
         }`}>
           {isUp ? '+' : ''}{formatPercentage(priceData.change24h)}
         </span>
       </div>
 
-      <p className="text-lg font-bold font-mono text-textPrimary mb-3">
+      <p className="text-lg font-semibold font-mono text-white mb-3">
         {formatCryptoPrice(priceData.price)}
       </p>
 
       {chartData.length > 2 && (
-        <div className="h-10 opacity-70 hover:opacity-100 transition-opacity">
+        <div className="h-10 opacity-60 hover:opacity-100 transition-opacity">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
               <Line
                 type="monotone"
                 dataKey="p"
-                stroke={isUp ? 'var(--success)' : 'var(--danger)'}
+                stroke={isUp ? '#34d399' : '#fb7185'}
                 strokeWidth={1.5}
                 dot={false}
               />

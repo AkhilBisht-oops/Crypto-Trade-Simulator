@@ -21,19 +21,19 @@ export default function LiveTicker() {
   const items = [...tickerItems, ...tickerItems];
 
   return (
-    <div className="w-full overflow-hidden bg-bgSub/60 border-b border-borderAccent/50 py-2.5 transition-colors">
+    <div className="w-full overflow-hidden bg-dark-950/30 border-b border-white/5 py-2.5">
       <div className="flex animate-ticker whitespace-nowrap">
         {items.map((item, idx) => (
           <div
             key={`${item.symbol}-${idx}`}
-            className="flex items-center gap-2 px-5 border-r border-borderAccent/40"
+            className="flex items-center gap-2 px-5 border-r border-white/5"
           >
             <span className="text-sm" style={{ color: item.info.color }}>{item.info.icon}</span>
-            <span className="text-xs font-medium text-textMuted">{item.symbol.replace('USDT', '')}</span>
-            <span className="text-sm font-mono font-medium text-textPrimary">
+            <span className="text-xs font-medium text-dark-400">{item.symbol.replace('USDT', '')}</span>
+            <span className="text-sm font-mono text-dark-200">
               {formatCryptoPrice(item.price.price)}
             </span>
-            <span className={`text-xs font-mono px-1.5 py-0.5 rounded font-semibold ${item.isUp ? 'text-successColor' : 'text-dangerColor'}`}>
+            <span className={`text-xs font-mono px-1.5 py-0.5 rounded ${item.isUp ? 'text-emerald-400' : 'text-rose-400'}`}>
               {item.isUp ? '+' : ''}{formatPercentage(item.price.change24h)}
             </span>
           </div>
