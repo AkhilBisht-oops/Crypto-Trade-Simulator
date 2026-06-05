@@ -27,26 +27,13 @@ export default function TradeForm({ selectedSymbol }) {
 
     try {
       const message = await executeTrade(selectedSymbol, type, qty);
-      toast.success(message, {
-        icon: type === 'BUY' ? '✓' : '✓',
-        style: {
-          background: '#1a1d2e',
-          color: '#e2e8f0',
-          border: '1px solid rgba(255, 255, 255, 0.05)',
-        },
-      });
+      toast.success(message);
       setQuantity('');
       fetchPortfolio();
       const newBalance = type === 'BUY' ? (user?.balance || 0) - total : (user?.balance || 0) + total;
       updateBalance(newBalance);
     } catch (error) {
-      toast.error(error.message, {
-        style: { 
-          background: '#1a1d2e', 
-          color: '#e2e8f0', 
-          border: '1px solid rgba(255, 255, 255, 0.05)',
-        },
-      });
+      toast.error(error.message);
     }
   };
 
@@ -62,30 +49,40 @@ export default function TradeForm({ selectedSymbol }) {
           {info?.icon}
         </div>
         <div>
-          <h2 className="text-sm font-semibold text-white">Trade {selectedSymbol.replace('USDT', '')}</h2>
-          <p className="text-xs text-dark-400 font-mono">{formatCryptoPrice(price)}</p>
+          <h2 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+            Trade {selectedSymbol.replace('USDT', '')}
+          </h2>
+          <p className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>
+            {formatCryptoPrice(price)}
+          </p>
         </div>
       </div>
 
       {/* Buy/Sell Toggle */}
-      <div className="relative flex p-1 bg-dark-950/60 rounded-lg border border-white/5 mb-6">
+      <div
+        className="relative flex p-1 rounded-lg mb-6"
+        style={{
+          backgroundColor: 'var(--bg-sub)',
+          border: '1px solid var(--border)',
+        }}
+      >
         <button
           onClick={() => setType('BUY')}
-          className={`flex-1 py-2.5 rounded-md font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all duration-200 z-10 ${
-            type === 'BUY'
-              ? 'bg-emerald-600 text-white'
-              : 'text-dark-400 hover:text-dark-200'
-          }`}
+          className="flex-1 py-2.5 rounded-md font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all duration-200 z-10"
+          style={{
+            backgroundColor: type === 'BUY' ? 'var(--success)' : 'transparent',
+            color: type === 'BUY' ? '#ffffff' : 'var(--text-muted)',
+          }}
         >
           <HiArrowUp className="w-3.5 h-3.5" /> Buy
         </button>
         <button
           onClick={() => setType('SELL')}
-          className={`flex-1 py-2.5 rounded-md font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all duration-200 z-10 ${
-            type === 'SELL'
-              ? 'bg-rose-600 text-white'
-              : 'text-dark-400 hover:text-dark-200'
-          }`}
+          className="flex-1 py-2.5 rounded-md font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all duration-200 z-10"
+          style={{
+            backgroundColor: type === 'SELL' ? 'var(--danger)' : 'transparent',
+            color: type === 'SELL' ? '#ffffff' : 'var(--text-muted)',
+          }}
         >
           <HiArrowDown className="w-3.5 h-3.5" /> Sell
         </button>
@@ -93,7 +90,9 @@ export default function TradeForm({ selectedSymbol }) {
 
       {/* Quantity Input */}
       <div className="mb-4">
-        <label className="block text-xs font-medium text-dark-300 mb-2">Quantity</label>
+        <label className="block text-xs font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
+          Quantity
+        </label>
         <input
           type="number"
           value={quantity}
@@ -111,7 +110,20 @@ export default function TradeForm({ selectedSymbol }) {
           <button
             key={amt}
             onClick={() => setQuantity(amt.toString())}
-            className="flex-1 py-1.5 text-xs font-mono text-dark-400 bg-dark-950/40 border border-white/5 rounded-lg hover:border-white/10 hover:text-dark-200 transition-all"
+            className="flex-1 py-1.5 text-xs font-mono rounded-lg transition-all"
+            style={{
+              backgroundColor: 'var(--bg-sub)',
+              border: '1px solid var(--border)',
+              color: 'var(--text-muted)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border-hover)';
+              e.currentTarget.style.color = 'var(--text-primary)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border)';
+              e.currentTarget.style.color = 'var(--text-muted)';
+            }}
           >
             {amt}
           </button>
@@ -119,37 +131,53 @@ export default function TradeForm({ selectedSymbol }) {
       </div>
 
       {/* Order Summary */}
-      <div className="space-y-3 mb-6 p-4 bg-dark-950/40 rounded-lg border border-white/5">
+      <div
+        className="space-y-3 mb-6 p-4 rounded-lg"
+        style={{
+          backgroundColor: 'var(--bg-sub)',
+          border: '1px solid var(--border)',
+        }}
+      >
         <div className="flex justify-between text-xs">
-          <span className="text-dark-400">Price</span>
-          <span className="font-mono text-dark-200">{formatCryptoPrice(price)}</span>
+          <span style={{ color: 'var(--text-muted)' }}>Price</span>
+          <span className="font-mono" style={{ color: 'var(--text-primary)' }}>{formatCryptoPrice(price)}</span>
         </div>
         <div className="flex justify-between text-xs">
-          <span className="text-dark-400">Quantity</span>
-          <span className="font-mono text-dark-200">{parseFloat(quantity) || 0}</span>
+          <span style={{ color: 'var(--text-muted)' }}>Quantity</span>
+          <span className="font-mono" style={{ color: 'var(--text-primary)' }}>{parseFloat(quantity) || 0}</span>
         </div>
-        <div className="border-t border-white/5 pt-3 flex justify-between">
-          <span className="text-dark-300 text-xs font-medium">Total</span>
-          <span className={`font-mono font-semibold text-sm ${type === 'BUY' ? 'text-emerald-400' : 'text-rose-400'}`}>
+        <div className="pt-3 flex justify-between" style={{ borderTop: '1px solid var(--border)' }}>
+          <span className="text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>Total</span>
+          <span
+            className="font-mono font-semibold text-sm"
+            style={{ color: type === 'BUY' ? 'var(--success)' : 'var(--danger)' }}
+          >
             {formatCurrency(total)}
           </span>
         </div>
       </div>
 
       {/* Available Balance */}
-      <div className="text-xs text-dark-400 mb-4 text-center px-3 py-1.5 rounded-lg border border-white/5 bg-dark-950/30">
-        Available: <span className="font-mono text-dark-200">{formatCurrency(user?.balance || 0)}</span>
+      <div
+        className="text-xs mb-4 text-center px-3 py-1.5 rounded-lg"
+        style={{
+          backgroundColor: 'var(--bg-sub)',
+          border: '1px solid var(--border)',
+          color: 'var(--text-muted)',
+        }}
+      >
+        Available: <span className="font-mono" style={{ color: 'var(--text-primary)' }}>{formatCurrency(user?.balance || 0)}</span>
       </div>
 
       {/* Execute Button */}
       <button
         onClick={handleTrade}
         disabled={isLoading || !quantity || parseFloat(quantity) <= 0}
-        className={`w-full py-3 rounded-lg font-semibold text-sm transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed ${
-          type === 'BUY'
-            ? 'bg-emerald-600 text-white hover:bg-emerald-500'
-            : 'bg-rose-600 text-white hover:bg-rose-500'
-        }`}
+        className="w-full py-3 rounded-lg font-semibold text-sm transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+        style={{
+          backgroundColor: type === 'BUY' ? 'var(--success)' : 'var(--danger)',
+          color: '#ffffff',
+        }}
       >
         {isLoading ? 'Processing...' : `${type === 'BUY' ? 'Buy' : 'Sell'} ${selectedSymbol.replace('USDT', '')}`}
       </button>

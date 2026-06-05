@@ -32,13 +32,18 @@ export default function TradingCard({ symbol, onSelect, isSelected }) {
   return (
     <button
       onClick={() => onSelect(symbol)}
-      className={`glass-card-hover p-4 text-left w-full transition-all duration-200 ${
-        isSelected ? 'border-indigo-500/40 bg-indigo-500/5' : ''
-      }`}
+      className="glass-card-hover p-4 text-left w-full"
+      style={{
+        borderColor: isSelected ? 'var(--accent)' : undefined,
+        boxShadow: isSelected ? 'var(--shadow-md)' : undefined,
+      }}
     >
-      {/* Subtle left accent for selected card */}
+      {/* Left accent for selected card */}
       {isSelected && (
-        <div className="absolute top-0 left-0 bottom-0 w-[2px] bg-indigo-500" />
+        <div
+          className="absolute top-0 left-0 bottom-0 w-[2px]"
+          style={{ backgroundColor: 'var(--accent)' }}
+        />
       )}
       
       <div className="flex items-center justify-between mb-3">
@@ -50,18 +55,24 @@ export default function TradingCard({ symbol, onSelect, isSelected }) {
             {info.icon}
           </div>
           <div>
-            <h3 className="font-semibold text-white text-sm">{symbol.replace('USDT', '')}</h3>
-            <p className="text-[11px] text-dark-400">{info.name}</p>
+            <h3 className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>
+              {symbol.replace('USDT', '')}
+            </h3>
+            <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>{info.name}</p>
           </div>
         </div>
-        <span className={`text-xs font-medium font-mono px-2 py-0.5 rounded-md ${
-          isUp ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'
-        }`}>
+        <span
+          className="text-xs font-medium font-mono px-2 py-0.5 rounded-md"
+          style={{
+            backgroundColor: isUp ? 'var(--success-light)' : 'var(--danger-light)',
+            color: isUp ? 'var(--success)' : 'var(--danger)',
+          }}
+        >
           {isUp ? '+' : ''}{formatPercentage(priceData.change24h)}
         </span>
       </div>
 
-      <p className="text-lg font-semibold font-mono text-white mb-3">
+      <p className="text-lg font-semibold font-mono mb-3" style={{ color: 'var(--text-primary)' }}>
         {formatCryptoPrice(priceData.price)}
       </p>
 
@@ -72,7 +83,7 @@ export default function TradingCard({ symbol, onSelect, isSelected }) {
               <Line
                 type="monotone"
                 dataKey="p"
-                stroke={isUp ? '#34d399' : '#fb7185'}
+                stroke={isUp ? '#16a34a' : '#dc2626'}
                 strokeWidth={1.5}
                 dot={false}
               />

@@ -33,34 +33,30 @@ export default function PortfolioSummary() {
       label: 'Total Portfolio',
       value: formatCurrency(portfolio.totalValue),
       icon: HiCollection,
-      color: 'text-white',
-      iconColor: 'text-indigo-400',
-      iconBg: 'bg-indigo-500/10',
+      color: 'var(--accent)',
+      iconBg: 'var(--accent-light)',
     },
     {
       label: 'Cash Balance',
       value: formatCurrency(portfolio.cashBalance),
       icon: HiCash,
-      color: 'text-white',
-      iconColor: 'text-amber-400',
-      iconBg: 'bg-amber-500/10',
+      color: '#eab308',
+      iconBg: '#eab30815',
     },
     {
       label: 'Holdings Value',
       value: formatCurrency(portfolio.holdingsValue),
       icon: HiCollection,
-      color: 'text-white',
-      iconColor: 'text-cyan-400',
-      iconBg: 'bg-cyan-500/10',
+      color: '#06b6d4',
+      iconBg: '#06b6d415',
     },
     {
       label: 'Total P&L',
       value: `${formatCurrency(Math.abs(portfolio.totalPnl))}`,
       subtitle: formatPercentage(portfolio.totalPnlPercentage),
       icon: isProfit ? HiTrendingUp : HiTrendingDown,
-      color: isProfit ? 'text-emerald-400' : 'text-rose-400',
-      iconColor: isProfit ? 'text-emerald-400' : 'text-rose-400',
-      iconBg: isProfit ? 'bg-emerald-500/10' : 'bg-rose-500/10',
+      color: isProfit ? 'var(--success)' : 'var(--danger)',
+      iconBg: isProfit ? 'var(--success-light)' : 'var(--danger-light)',
     },
   ];
 
@@ -72,14 +68,19 @@ export default function PortfolioSummary() {
           return (
             <div key={stat.label} className="glass-card p-5">
               <div className="flex items-center gap-3 mb-3">
-                <div className={`p-2 rounded-lg ${stat.iconBg}`}>
-                  <Icon className={`w-4 h-4 ${stat.iconColor}`} />
+                <div
+                  className="p-2 rounded-lg"
+                  style={{ backgroundColor: stat.iconBg }}
+                >
+                  <Icon className="w-4 h-4" style={{ color: stat.color }} />
                 </div>
-                <span className="text-xs text-dark-400">{stat.label}</span>
+                <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{stat.label}</span>
               </div>
-              <p className={`text-xl font-semibold font-mono ${stat.color}`}>{stat.value}</p>
+              <p className="text-xl font-semibold font-mono" style={{ color: 'var(--text-primary)' }}>
+                {stat.value}
+              </p>
               {stat.subtitle && (
-                <p className={`text-xs font-mono mt-1 ${stat.color}`}>
+                <p className="text-xs font-mono mt-1" style={{ color: stat.color }}>
                   {isProfit ? '+' : '-'}{stat.subtitle}
                 </p>
               )}
@@ -90,13 +91,13 @@ export default function PortfolioSummary() {
 
       {portfolio.holdings.length > 0 && (
         <div className="glass-card">
-          <div className="p-4 border-b border-white/5">
-            <h3 className="text-sm font-semibold text-white">Holdings</h3>
+          <div className="p-4" style={{ borderBottom: '1px solid var(--border)' }}>
+            <h3 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Holdings</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="text-left text-xs text-dark-400 border-b border-white/5">
+                <tr className="text-left text-xs" style={{ color: 'var(--text-muted)', borderBottom: '1px solid var(--border)' }}>
                   <th className="p-4 font-medium">Asset</th>
                   <th className="p-4 font-medium">Quantity</th>
                   <th className="p-4 font-medium">Avg Price</th>
@@ -105,27 +106,43 @@ export default function PortfolioSummary() {
                   <th className="p-4 font-medium">P&L</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody>
                 {portfolio.holdings.map((h) => {
                   const info = SYMBOL_INFO[h.symbol];
                   const isProfitable = h.pnl >= 0;
                   return (
-                    <tr key={h.symbol} className="hover:bg-white/[0.02] transition-colors">
+                    <tr
+                      key={h.symbol}
+                      className="transition-colors"
+                      style={{ borderBottom: '1px solid var(--border)' }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-sub)'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                    >
                       <td className="p-4">
                         <div className="flex items-center gap-2.5">
                           <span style={{ color: info?.color }} className="text-base">{info?.icon}</span>
                           <div>
-                            <p className="font-medium text-white text-sm">{h.symbol.replace('USDT', '')}</p>
-                            <p className="text-xs text-dark-400">{info?.name}</p>
+                            <p className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>
+                              {h.symbol.replace('USDT', '')}
+                            </p>
+                            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{info?.name}</p>
                           </div>
                         </div>
                       </td>
-                      <td className="p-4 font-mono text-sm text-dark-200">{h.quantity.toFixed(6)}</td>
-                      <td className="p-4 font-mono text-sm text-dark-400">{formatCurrency(h.avgBuyPrice)}</td>
-                      <td className="p-4 font-mono text-sm text-dark-200">{formatCurrency(h.currentPrice)}</td>
-                      <td className="p-4 font-mono text-sm text-white">{formatCurrency(h.currentValue)}</td>
+                      <td className="p-4 font-mono text-sm" style={{ color: 'var(--text-secondary)' }}>
+                        {h.quantity.toFixed(6)}
+                      </td>
+                      <td className="p-4 font-mono text-sm" style={{ color: 'var(--text-muted)' }}>
+                        {formatCurrency(h.avgBuyPrice)}
+                      </td>
+                      <td className="p-4 font-mono text-sm" style={{ color: 'var(--text-secondary)' }}>
+                        {formatCurrency(h.currentPrice)}
+                      </td>
+                      <td className="p-4 font-mono text-sm" style={{ color: 'var(--text-primary)' }}>
+                        {formatCurrency(h.currentValue)}
+                      </td>
                       <td className="p-4">
-                        <div className={`font-mono text-sm ${isProfitable ? 'text-emerald-400' : 'text-rose-400'}`}>
+                        <div className="font-mono text-sm" style={{ color: isProfitable ? 'var(--success)' : 'var(--danger)' }}>
                           <p>{isProfitable ? '+' : ''}{formatCurrency(h.pnl)}</p>
                           <p className="text-xs">{isProfitable ? '+' : ''}{formatPercentage(h.pnlPercentage)}</p>
                         </div>
