@@ -11,6 +11,7 @@ class BinanceService {
     this.reconnectDelay = 5000;
     this.onPriceUpdate = null;
     this.priceHistory = new Map();
+    this.wsConnected = false;
 
     // Initialize with default prices
     config.supportedSymbols.forEach((symbol) => {
@@ -24,10 +25,118 @@ class BinanceService {
     });
   }
 
+  /**
+   * Fetch initial prices from Binance REST API (works globally, no geo-block).
+   * This ensures prices are available immediately on server startup,
+   * even before the WebSocket connects (or if it's blocked by 451).
+   */
+  async fetchInitialPrices() {
+    try {
+      const restUrl = process.env.BINANCE_REST_URL || 'https://api.binance.com';
+      const symbolsParam = config.supportedSymbols.map(s => `"${s}"`).join(',');
+      const url = `${restUrl}/api/v3/ticker/24hr?symbols=[${symbolsParam}]`;
+
+      console.log('[Binance] Fetching initial prices via REST API...');
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        // If binance.com is blocked, try binance.us
+        console.warn(`[Binance] REST API returned ${response.status}, trying fallback...`);
+        return await this.fetchInitialPricesFallback();
+      }
+
+      const data = await response.json();
+      let count = 0;
+
+      for (const ticker of data) {
+        const symbol = ticker.symbol;
+        if (!config.supportedSymbols.includes(symbol)) continue;
+
+        const price = parseFloat(ticker.lastPrice);
+        const change24h = parseFloat(ticker.priceChangePercent);
+
+        if (price > 0) {
+          const priceData = { symbol, price, change24h, timestamp: Date.now() };
+          this.prices.set(symbol, priceData);
+
+          const history = this.priceHistory.get(symbol) || [];
+          history.push(price);
+          this.priceHistory.set(symbol, history);
+
+          cacheSet(`price:${symbol}`, JSON.stringify(priceData), 60).catch(() => {});
+          count++;
+        }
+      }
+
+      console.log(`[Binance] Loaded ${count} initial prices via REST API`);
+
+      if (this.onPriceUpdate) {
+        this.onPriceUpdate(this.prices);
+      }
+    } catch (err) {
+      console.warn('[Binance] REST API fetch failed:', err.message);
+      await this.fetchInitialPricesFallback();
+    }
+  }
+
+  /**
+   * Fallback: fetch prices from Binance US REST API.
+   */
+  async fetchInitialPricesFallback() {
+    try {
+      console.log('[Binance] Trying Binance US REST API as fallback...');
+
+      let count = 0;
+      for (const symbol of config.supportedSymbols) {
+        try {
+          const url = `https://api.binance.us/api/v3/ticker/24hr?symbol=${symbol}`;
+          const response = await fetch(url);
+          if (!response.ok) continue;
+
+          const ticker = await response.json();
+          const price = parseFloat(ticker.lastPrice);
+          const change24h = parseFloat(ticker.priceChangePercent);
+
+          if (price > 0) {
+            const priceData = { symbol, price, change24h, timestamp: Date.now() };
+            this.prices.set(symbol, priceData);
+
+            const history = this.priceHistory.get(symbol) || [];
+            history.push(price);
+            this.priceHistory.set(symbol, history);
+
+            cacheSet(`price:${symbol}`, JSON.stringify(priceData), 60).catch(() => {});
+            count++;
+          }
+        } catch {
+          // Some symbols may not exist on Binance US, skip them
+        }
+      }
+
+      console.log(`[Binance] Loaded ${count} prices from Binance US fallback`);
+
+      if (this.onPriceUpdate && count > 0) {
+        this.onPriceUpdate(this.prices);
+      }
+    } catch (err) {
+      console.warn('[Binance] All REST API fallbacks failed:', err.message);
+    }
+  }
+
   connect(onPriceUpdate) {
     if (onPriceUpdate) {
       this.onPriceUpdate = onPriceUpdate;
     }
+
+    // Fetch initial prices via REST immediately (non-blocking)
+    this.fetchInitialPrices();
+
+    // Also set up a periodic REST poll as backup (every 10 seconds)
+    this.pollInterval = setInterval(() => {
+      if (!this.wsConnected) {
+        this.fetchInitialPrices();
+      }
+    }, 10000);
 
     const streams = config.supportedSymbols.map((s) => `${s.toLowerCase()}@miniTicker`).join('/');
     const url = `${config.binanceWsUrl}/${streams}`;
@@ -40,6 +149,7 @@ class BinanceService {
       this.ws.on('open', () => {
         console.log('[Binance] WebSocket connected');
         this.reconnectAttempts = 0;
+        this.wsConnected = true;
       });
 
       this.ws.on('message', (data) => {
@@ -53,11 +163,13 @@ class BinanceService {
 
       this.ws.on('close', () => {
         console.log('[Binance] WebSocket disconnected');
+        this.wsConnected = false;
         this.scheduleReconnect();
       });
 
       this.ws.on('error', (err) => {
         console.error('[Binance] WebSocket error:', err.message);
+        this.wsConnected = false;
       });
     } catch (err) {
       console.error('[Binance] Connection failed, will retry');
@@ -99,7 +211,7 @@ class BinanceService {
 
   scheduleReconnect() {
     if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-      console.error('[Binance] Max reconnect attempts reached');
+      console.error('[Binance] Max reconnect attempts reached, falling back to REST polling');
       return;
     }
 
@@ -136,6 +248,10 @@ class BinanceService {
   }
 
   disconnect() {
+    if (this.pollInterval) {
+      clearInterval(this.pollInterval);
+      this.pollInterval = null;
+    }
     if (this.ws) {
       this.ws.close();
       this.ws = null;
