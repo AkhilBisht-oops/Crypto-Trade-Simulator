@@ -11,7 +11,6 @@ A full-stack, real-time cryptocurrency paper trading simulator built with Node.j
 - **Trading Engine**: BUY and SELL virtual crypto with atomic operations using Prisma transactions, automatic avg-buy-price updates, and validation checks.
 - **Watchlist**: Track custom symbols in real-time with responsive UI indicators.
 - **Portfolio & Leaderboard**: Visual performance charts using Recharts, live P&L calculators, and a global leader rank.
-- **Premium UI**: Professional, humanized SaaS dashboard design with a sleek neutral/indigo color palette.
 
 ---
 
