@@ -184,7 +184,15 @@ class BinanceService {
     if (!config.supportedSymbols.includes(symbol)) return;
 
     const price = parseFloat(data.c);
-    const change24h = parseFloat(data.P || '0');
+    let change24h = parseFloat(data.P || '0');
+
+    // miniTicker doesn't have P (priceChangePercent), so we calculate it
+    if (!data.P && data.o) {
+      const openPrice = parseFloat(data.o);
+      if (openPrice > 0) {
+        change24h = ((price - openPrice) / openPrice) * 100;
+      }
+    }
 
     const priceData = {
       symbol,
