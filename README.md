@@ -1,6 +1,8 @@
 # Real-Time Crypto Trading Simulator
 
-A full-stack, real-time cryptocurrency paper trading simulator built with Node.js, Express, React, TypeScript, WebSocket (Binance API), Socket.IO, PostgreSQL, Redis, and Prisma ORM.
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://crypto-trade-simulator.vercel.app/)
+
+A full-stack, real-time cryptocurrency paper trading simulator built with Node.js, Express, React, JavaScript, WebSocket (Binance API), Socket.IO, PostgreSQL, Redis, and Prisma ORM.
 
 ## Features
 
@@ -9,7 +11,8 @@ A full-stack, real-time cryptocurrency paper trading simulator built with Node.j
 - **Trading Engine**: BUY and SELL virtual crypto with atomic operations using Prisma transactions, automatic avg-buy-price updates, and validation checks.
 - **Watchlist**: Track custom symbols in real-time with responsive UI indicators.
 - **Portfolio & Leaderboard**: Visual performance charts using Recharts, live P&L calculators, and a global leader rank.
-- **Docker Ready**: Fully containerized environment with Postgres database, Redis cache, backend server, and frontend Nginx image.
+- **Premium UI**: Professional, humanized SaaS dashboard design with a sleek neutral/indigo color palette.
+- **Docker & Render Ready**: Fully containerized environment for local development and a `render.yaml` included for easy deployment on Render.
 
 ---
 
@@ -17,8 +20,8 @@ A full-stack, real-time cryptocurrency paper trading simulator built with Node.j
 
 | Area | Technologies |
 |---|---|
-| **Frontend** | React (Vite), TypeScript, Tailwind CSS, Recharts, Zustand, Socket.IO Client, Axios |
-| **Backend** | Node.js, Express, TypeScript, Socket.IO Server, ws (Binance Websocket Client) |
+| **Frontend** | React (Vite), JavaScript, Tailwind CSS, Recharts, Zustand, Socket.IO Client, Axios |
+| **Backend** | Node.js, Express, JavaScript, Socket.IO Server, ws (Binance Websocket Client) |
 | **Database & Cache** | PostgreSQL, Prisma ORM, Redis |
 | **DevOps** | Docker, Nginx, docker-compose |
 
