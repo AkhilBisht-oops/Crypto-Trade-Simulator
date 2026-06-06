@@ -12,7 +12,6 @@ A full-stack, real-time cryptocurrency paper trading simulator built with Node.j
 - **Watchlist**: Track custom symbols in real-time with responsive UI indicators.
 - **Portfolio & Leaderboard**: Visual performance charts using Recharts, live P&L calculators, and a global leader rank.
 - **Premium UI**: Professional, humanized SaaS dashboard design with a sleek neutral/indigo color palette.
-- **Docker & Render Ready**: Fully containerized environment for local development and a `render.yaml` included for easy deployment on Render.
 
 ---
 
@@ -23,7 +22,6 @@ A full-stack, real-time cryptocurrency paper trading simulator built with Node.j
 | **Frontend** | React (Vite), JavaScript, Tailwind CSS, Recharts, Zustand, Socket.IO Client, Axios |
 | **Backend** | Node.js, Express, JavaScript, Socket.IO Server, ws (Binance Websocket Client) |
 | **Database & Cache** | PostgreSQL, Prisma ORM, Redis |
-| **DevOps** | Docker, Nginx, docker-compose |
 
 ---
 
@@ -31,39 +29,18 @@ A full-stack, real-time cryptocurrency paper trading simulator built with Node.j
 
 ```
 .
-├── docker-compose.yml          # Container configuration
 ├── client/                     # Frontend Vite SPA
-│   ├── src/                    # Components, pages, stores, hooks
-│   ├── Dockerfile
-│   └── nginx.conf              # SPA & proxy configuration
+│   └── src/                    # Components, pages, stores, hooks
 └── server/                     # Backend API & WebSocket server
     ├── src/                    # Services, controllers, websocket stream
-    ├── prisma/                 # Database schemas & migrations
-    └── Dockerfile
+    └── prisma/                 # Database schemas & migrations
 ```
 
 ---
 
 ## Setup & Running Guide
 
-### Method 1: Using Docker (Recommended)
-
-To run the entire suite (PostgreSQL, Redis, Backend, Frontend) with a single command:
-
-1. Make sure you have **Docker** and **Docker Compose** installed.
-2. In the root directory, run:
-   ```bash
-   docker-compose up --build
-   ```
-3. Open your browser to `http://localhost:5173`.
-4. *Optional:* Run database seeds to populate leaderboard/test data:
-   ```bash
-   docker-compose exec server npm run seed
-   ```
-
-### Method 2: Manual Local Setup
-
-#### Prerequisites
+### Prerequisites
 - Node.js (v20+)
 - PostgreSQL running locally
 - Redis running locally (optional, falls back gracefully)
