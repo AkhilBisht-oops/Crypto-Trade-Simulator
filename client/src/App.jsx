@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useState, useEffect, createContext, useContext } from 'react';
 import { useAuthStore } from './stores/authStore';
 import { Toaster } from 'react-hot-toast';
@@ -25,8 +25,93 @@ export function useTheme() {
   return useContext(ThemeContext);
 }
 
+function AppContent() {
+  const { isAuthenticated } = useAuthStore();
+  const location = useLocation();
+  const isLandingPage = location.pathname === '/';
+
+  return (
+    <div className="min-h-screen flex flex-col font-sans transition-colors duration-200"
+         style={{ backgroundColor: 'var(--bg-main)', color: 'var(--text-secondary)' }}>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+        toastOptions={{
+          style: {
+            background: 'var(--bg-card)',
+            color: 'var(--text-primary)',
+            border: '1px solid var(--border)',
+            boxShadow: 'var(--shadow-md)',
+          },
+        }}
+      />
+
+      {/* Global Live Price Ticker */}
+      {isAuthenticated && !isLandingPage && <LiveTicker />}
+
+      {/* Main Navbar */}
+      {isAuthenticated && !isLandingPage && <Navbar />}
+
+      {/* Routes Area */}
+      <main className={`flex-1 ${isAuthenticated && !isLandingPage ? 'max-w-[1920px] w-full mx-auto p-4 sm:p-6' : ''}`}>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Landing />} />
+          <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/dashboard" />} />
+          <Route path="/register" element={!isAuthenticated ? <Register /> : <Navigate to="/dashboard" />} />
+
+          {/* Protected Routes */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/portfolio"
+            element={
+              <ProtectedRoute>
+                <Portfolio />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/history"
+            element={
+              <ProtectedRoute>
+                <TradeHistory />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/watchlist"
+            element={
+              <ProtectedRoute>
+                <Watchlist />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/leaderboard"
+            element={
+              <ProtectedRoute>
+                <Leaderboard />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Catch-all */}
+          <Route path="*" element={<Navigate to={isAuthenticated ? "/dashboard" : "/"} replace />} />
+        </Routes>
+      </main>
+    </div>
+  );
+}
+
 export default function App() {
-  const { loadUser, isAuthenticated } = useAuthStore();
+  const { loadUser } = useAuthStore();
 
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') ||
@@ -49,82 +134,7 @@ export default function App() {
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       <Router>
-        <div className="min-h-screen flex flex-col font-sans transition-colors duration-200"
-             style={{ backgroundColor: 'var(--bg-main)', color: 'var(--text-secondary)' }}>
-          <Toaster
-            position="top-right"
-            reverseOrder={false}
-            toastOptions={{
-              style: {
-                background: 'var(--bg-card)',
-                color: 'var(--text-primary)',
-                border: '1px solid var(--border)',
-                boxShadow: 'var(--shadow-md)',
-              },
-            }}
-          />
-
-          {/* Global Live Price Ticker */}
-          {isAuthenticated && <LiveTicker />}
-
-          {/* Main Navbar */}
-          {isAuthenticated && <Navbar />}
-
-          {/* Routes Area */}
-          <main className={`flex-1 ${isAuthenticated ? 'max-w-[1920px] w-full mx-auto p-4 sm:p-6' : ''}`}>
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/" element={<Landing />} />
-              <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/dashboard" />} />
-              <Route path="/register" element={!isAuthenticated ? <Register /> : <Navigate to="/dashboard" />} />
-
-              {/* Protected Routes */}
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/portfolio"
-                element={
-                  <ProtectedRoute>
-                    <Portfolio />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/history"
-                element={
-                  <ProtectedRoute>
-                    <TradeHistory />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/watchlist"
-                element={
-                  <ProtectedRoute>
-                    <Watchlist />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/leaderboard"
-                element={
-                  <ProtectedRoute>
-                    <Leaderboard />
-                  </ProtectedRoute>
-                }
-              />
-
-              {/* Catch-all */}
-              <Route path="*" element={<Navigate to={isAuthenticated ? "/dashboard" : "/"} replace />} />
-            </Routes>
-          </main>
-        </div>
+        <AppContent />
       </Router>
     </ThemeContext.Provider>
   );
