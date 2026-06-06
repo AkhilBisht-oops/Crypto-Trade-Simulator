@@ -1,0 +1,52 @@
+services:
+  # Backend API Web Service
+  - type: web
+    name: crypto-trading-simulator-api
+    env: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install && npm run build
+    startCommand: npx prisma db push && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: crypto-trading-db
+          property: connectionString
+      - key: CORS_ORIGIN
+        # CORS_ORIGIN is dynamic, but since we are on Render, we can use wildcards
+        # or update this once the frontend URL is generated.
+        value: "*"
+
+  # Frontend Static Site
+  - type: web
+    name: crypto-trading-simulator-ui
+    env: static
+    plan: free
+    rootDir: client
+    buildCommand: npm install && npm run build
+    publishDir: dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: crypto-trading-simulator-api
+          type: web
+          property: url
+        # Render automatically substitutes ${value} with the linked service's URL
+        value: ${value}/api
+      - key: VITE_WS_URL
+        fromService:
+          name: crypto-trading-simulator-api
+          type: web
+          property: url
+
+databases:
+  - name: crypto-trading-db
+    plan: free
+    databaseName: crypto_trading_sim
+    user: crypto_user

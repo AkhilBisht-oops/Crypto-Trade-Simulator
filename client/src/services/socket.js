@@ -10,7 +10,7 @@ class SocketService {
   connect(token) {
     if (this.socket?.connected) return;
 
-    this.socket = io('/', {
+    this.socket = io(import.meta.env.VITE_WS_URL || '/', {
       auth: { token },
       transports: ['websocket', 'polling'],
       reconnection: true,
