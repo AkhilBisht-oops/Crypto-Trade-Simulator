@@ -74,7 +74,7 @@ export default function App() {
           <main className={`flex-1 ${isAuthenticated ? 'max-w-[1920px] w-full mx-auto p-4 sm:p-6' : ''}`}>
             <Routes>
               {/* Public Routes */}
-              <Route path="/" element={!isAuthenticated ? <Landing /> : <Navigate to="/dashboard" />} />
+              <Route path="/" element={<Landing />} />
               <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/dashboard" />} />
               <Route path="/register" element={!isAuthenticated ? <Register /> : <Navigate to="/dashboard" />} />
 

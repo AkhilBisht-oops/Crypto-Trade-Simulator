@@ -30,7 +30,7 @@ export default function Navbar() {
       <div className="max-w-[1920px] mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/dashboard" className="flex items-center gap-2.5 group">
+          <Link to="/" className="flex items-center gap-2.5 group">
             <Coins size={20} style={{ color: 'var(--accent)' }} />
             <span
               className="text-lg font-semibold hidden sm:block tracking-tight"
