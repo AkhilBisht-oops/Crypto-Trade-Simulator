@@ -8,7 +8,7 @@ const config = {
   jwtSecret: process.env.JWT_SECRET || 'fallback_secret_key',
   corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   nodeEnv: process.env.NODE_ENV || 'development',
-  binanceWsUrl: 'wss://stream.binance.com:9443/ws',
+  binanceWsUrl: process.env.BINANCE_WS_URL || 'wss://stream.binance.com:9443/ws',
   supportedSymbols: ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT', 'XRPUSDT', 'ADAUSDT', 'DOGEUSDT', 'DOTUSDT'],
   initialBalance: 10000,
 };

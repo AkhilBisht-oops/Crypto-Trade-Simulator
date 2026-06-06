@@ -40,6 +40,7 @@ To run the application, you need a hosted PostgreSQL database.
 3. Connect your GitHub repository.
 4. Set the following details:
    - **Name**: `crypto-trading-backend`
+   - **Region**: **Frankfurt (Germany)** or **Singapore** *(CRITICAL: Do NOT choose US regions like Oregon/Ohio, as Binance.com blocks US IPs and will cause a `WebSocket error: Unexpected server response: 451` error. If you must use a US region, see the note below on `BINANCE_WS_URL`)*
    - **Root Directory**: `server`
    - **Language**: `Node`
    - **Build Command**: `npm install && npm run build`
@@ -50,6 +51,7 @@ To run the application, you need a hosted PostgreSQL database.
    - `PORT`: `4000`
    - `CORS_ORIGIN`: `https://your-frontend-domain.onrender.com` (you can update this after deploying the frontend)
    - `NODE_ENV`: `production`
+   - `BINANCE_WS_URL`: *(Optional. Only if hosted in a US region, set this to `wss://stream.binance.us:9443/ws` to use Binance US, though some coins may not stream correctly)*
 6. Click **Create Web Service**.
 
 Once deployed, copy your backend URL (e.g., `https://crypto-trading-backend.onrender.com`).
