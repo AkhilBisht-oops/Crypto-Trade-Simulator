@@ -49,11 +49,10 @@ initializeWebSocket(httpServer);
 // Start server
 httpServer.listen(config.port, () => {
   console.log(`
-  ╔══════════════════════════════════════════╗
-  ║   🚀 Crypto Trading Simulator Server    ║
-  ║   Running on port ${config.port}                  ║
-  ║   Environment: ${config.nodeEnv.padEnd(22)}  ║
-  ╚══════════════════════════════════════════╝
+
+        Crypto Trading Simulator Server
+      Running on port ${config.port}        
+    Environment: ${config.nodeEnv.padEnd(22)}  
   `);
 
   // Keep-alive self-ping for Render free tier (prevents cold starts)

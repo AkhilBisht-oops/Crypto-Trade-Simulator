@@ -10,10 +10,8 @@ class TradeController {
 
       const result = await tradeService.executeTrade(userId, symbol, type, quantity);
 
-      // Invalidate portfolio cache
       await portfolioService.invalidateCache(userId);
 
-      // Emit trade event via Socket.IO
       const io = getSocketServer();
       if (io) {
         io.to(`user:${userId}`).emit('trade:executed', {

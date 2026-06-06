@@ -16,8 +16,7 @@ const parseCorsOrigin = () => {
       finalOrigins.push(clean + '/');
     }
   });
-
-  // Always include localhost dev server variants
+  
   const devOrigins = ['http://localhost:5173', 'http://localhost:5173/'];
   devOrigins.forEach(devOrig => {
     if (!finalOrigins.includes(devOrig)) {

@@ -79,9 +79,9 @@ class BinanceService {
     }
   }
 
-  /**
-   * Fallback: fetch prices from Binance US REST API.
-   */
+  /*
+    Fallback: fetch prices from Binance US REST API.
+  */
   async fetchInitialPricesFallback() {
     try {
       console.log('[Binance] Trying Binance US REST API as fallback...');
