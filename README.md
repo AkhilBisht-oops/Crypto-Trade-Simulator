@@ -18,7 +18,7 @@ A full-stack, real-time cryptocurrency paper trading simulator built with Node.j
 
 | Area | Technologies |
 |---|---|
-| **Frontend** | React (Vite), JavaScript, Tailwind CSS, Recharts, Zustand, Socket.IO Client, Axios |
+| **Frontend** | React , JavaScript, Tailwind CSS, Recharts, Zustand, Socket.IO Client, Axios |
 | **Backend** | Node.js, Express, JavaScript, Socket.IO Server, ws (Binance Websocket Client) |
 | **Database & Cache** | PostgreSQL, Prisma ORM, Redis |
 
