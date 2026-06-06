@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Design Tokens ── */
 :root {
   --space-1: 8px;
   --space-2: 16px;
@@ -107,7 +106,6 @@
 }
 
 @layer components {
-  /* ── Theme-aware glass card ── */
   .glass-card {
     background-color: var(--bg-card);
     border: 1px solid var(--border);
@@ -220,8 +218,6 @@
     @apply bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-rose-400;
   }
 }
-
-/* ── Landing Page Styling (Scoped) ── */
 
 .landing-page-wrapper {
   background-color: var(--bg-main);
