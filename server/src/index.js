@@ -55,6 +55,21 @@ httpServer.listen(config.port, () => {
   ║   Environment: ${config.nodeEnv.padEnd(22)}  ║
   ╚══════════════════════════════════════════╝
   `);
+
+  // Keep-alive self-ping for Render free tier (prevents cold starts)
+  if (config.nodeEnv === 'production') {
+    const KEEP_ALIVE_INTERVAL = 14 * 60 * 1000; // 14 minutes
+    const selfUrl = process.env.RENDER_EXTERNAL_URL || `http://localhost:${config.port}`;
+    setInterval(async () => {
+      try {
+        await fetch(`${selfUrl}/api/health`);
+        console.log('[KeepAlive] Self-ping successful');
+      } catch (err) {
+        console.warn('[KeepAlive] Self-ping failed:', err.message);
+      }
+    }, KEEP_ALIVE_INTERVAL);
+    console.log('[KeepAlive] Self-ping enabled (every 14 minutes)');
+  }
 });
 
 // Graceful shutdown
